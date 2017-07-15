@@ -48,11 +48,10 @@ void DigitalDecoder::writeDeviceState()
     file.close();
 }
 
-#warning "Update the SmartThings endpoint here"
 void DigitalDecoder::sendDeviceState()
 {
     printf("Sending Device State\n");
-    system("curl -H 'Authorization: Bearer 12345678-1234-1234-1234-1234567890ab' -H 'Content-Type: application/json' -X PUT -d '@/var/www/html/deviceState.json' https://graph.api.smartthings.com:443/api/smartapps/installations/12345678-1234-1234-1234-1234567890ab/event&");
+    system("/home/pi/rtl/honeywell_to_mqtt/translate_mqtt.py");
 }
 
 void DigitalDecoder::updateDeviceState(uint32_t serial, uint8_t state)
@@ -125,7 +124,7 @@ void DigitalDecoder::handlePayload(uint64_t payload)
     //
     // Check CRC
     //
-    const uint64_t polynomial = 0x18005;
+    const uint64_t polynomial = 0x18050;
     uint64_t sum = payload & (~SYNC_MASK);
     uint64_t current_divisor = polynomial << 31;
     
